@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" href="images/Pooh.webp">
+    <link rel="stylesheet" href="./main.css" />
+    <!-- <link rel="reset-stylesheet" href="./src/styles/reset.scss" /> -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <script src="https://kit.fontawesome.com/ba6705ca2d.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="./dist/main.js"></script>
+    <title>NASDAN</title>
+</head>
+
+<body style ="background-image: url('./images/mountainbackground.png');">
+    
+    <nav class="topnav">
+            <h1 class ="title">
+                <span style ="--i:0"><img src="images/Pooh.webp" width="20" height="20"></span>
+                <span></span>
+                <span style ="--i:1">N</span>
+                <span style ="--i:2">A</span>
+                <span style ="--i:3">S</span>
+                <span style ="--i:4">D</span>
+                <span style ="--i:5">A</span>
+                <span style ="--i:6">N</span>
+                <span style ="--i:7"><img src="images/bull.png" width="22" height="30" style="padding-top:8px"></span>
+
+            </h1>
+
+
+
+            <form action="" id = "search">
+                <div class ='focus'>
+                    <input id="search-input" type="text" class="input-search" placeholder="Search Stock Ticker... ">
+                    <button type = "button" class="search-button" id = "search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+
+            <ul class="navlinks">
+                <li><a id ="icons" href="https://danielli.dev"><i class="fa-regular fa-user"></i></a></li>
+                <li><a id ="icons" href="https://www.linkedin.com/in/danielli52/"><i class="fa-brands fa-linkedin"></i></a></li>
+                <li><a id ="icons" href="https://github.com/DLi53"><i class="fa-brands fa-github"></i></a></li>
+                <!-- <li><a id="icons" href="https://angel.co/u/daniel-li-66"><i class="fa-brands fa-angellist"></i></a></li> -->
+            </ul>
+    </nav>
+
+
+    <div class ="mid-section">
+        <div class="chart">   
+            <canvas id="myChart"></canvas>
+            <br>
+            <div class ="time-changes">
+                <button id="1w">1 Wk</button>
+                <button id="1m">1 Mo</button>
+                <button id="6m">6 Mo</button>
+                <button id="1y">1 Yr</button>
+                <button id="5y">5 Yr</button>
+                <button id="max">Max</button>
+
+            </div>
+        </div>
+
+        <div class = 'sidebar'>
+            <div class = stock-info id="stock-info">
+                <div class="stock-info-head">
+                    <h2>Stock Info <i class="fa-solid fa-arrow-trend-up"></i></h2>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <br>
+            <form action="">
+                <button id="macd">MACD</button>
+            </form>
+            <br>
+            <form action="">
+                <button id="toggle-graph">Toggle Graph</button>
+            </form>
+            <br>
+
+            <form action="">
+                <button id="clear-graph">Clear Graph</button>
+            </form>
+            <br>
+
+
+        </div>
+
+    </div>
+
+    <div class="howTo">
+        <ul>
+            <li>Hi, Welcome to NasDan!</li>
+            <br>
+            <li>NasDan is a Stock Data Visualizer where you can see the historical data of a stock.</li>
+            <li>To begin, please type in a stock ticker symbol (Ex. AAPL, MSFT, TSLA) to view the historical chart.</li>
+            <li>You can toggle the chart type to a bar graph by clicking the "Toggle Graph" button.</li>
+            <li>You can also change the dates of the data you are viewing by pressing one of the buttons below the graph.</li>
+            <li>Lastly, you can add a 5 Day Moving Average Convergence Divergence Line for the last search by pressing the MACD Button.</li>
+            <br>
+            <li>Enjoy! </li>
+        </ul>
+
+    </div>
+
+
+
+    <!-- <div class = 'news'>
+        <rssapp-carousel id="B4IS4boqMe2VmiWu"></rssapp-carousel>
+        <script src="https://widget.rss.app/v1/carousel.js" type="text/javascript" async></script>
+        <h5 id="citation">code from rss.app <i class="fa-solid fa-copyright"></i></h5>
+    </div> -->
+
+    <br>
+    <br>
+
+    <div class="rotatingbar">
+        <div class="tradingview-widget-copyright">
+            <a href="https://www.tradingview.com/markets/" rel="noopener" target="_blank">
+                <span class="blue-text">Markets</span>
+            </a> by TradingView
+        </div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            {
+                    "symbols": [
+                        {"description": "","proName": "AMEX:SPY"},
+                        {"description": "","proName": "NASDAQ:NDAQ"},
+                        {"description": "","proName": "DJI"},
+                        {"description": "","proName": "NASDAQ:AAPL"},
+                        {"description": "","proName": "NASDAQ:AMZN"},
+                        {"description": "","proName": "NASDAQ:TSLA"},
+                        {"description": "","proName": "NASDAQ:MSFT"},
+                        {"description": "","proName": "NASDAQ:NFLX"},
+                        {"description": "","proName": "NASDAQ:GOOGL"},
+                        {"description": "","proName": "NYSE:BRK.B"}
+                    ],
+                    "showSymbolLogo": true,
+                    "colorTheme": "light",
+                    "isTransparent": false,
+                    "displayMode": "adaptive",
+                    "locale": "en"
+                }
+        </script>
+
+    </div>
+
+</body>
+
+</html>
