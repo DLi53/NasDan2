@@ -14,7 +14,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script src="./dist/main.js"></script>
+    <!-- <script src="./dist/main.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/main.js"></script>
     <title>NASDAN</title>
 </head>
 
@@ -39,6 +44,7 @@
             <form action="" id = "search">
                 <div class ='focus'>
                     <input id="search-input" type="text" class="input-search" placeholder="Search Stock Ticker... ">
+                    <div id="error-message" style="display:none;color:red;"></div>
                     <button type = "button" class="search-button" id = "search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </form>
@@ -54,7 +60,8 @@
 
     <div class ="mid-section">
         <div class="chart">   
-            <canvas id="myChart"></canvas>
+            <!-- <canvas id="stock-chart"></canvas> -->
+            <canvas id="stock-chart" width="400" height="400"></canvas>
             <br>
             <div class ="time-changes">
                 <button id="1w">1 Wk</button>
