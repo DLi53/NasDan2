@@ -1,24 +1,45 @@
-function createStockChart(stockData, period) {
-  let labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
-  let prices = [12, 19, 3, 5, 2, 3];
+function createStockChart(stockData, period = "1W") {
+  // Check if stockData is valid and contains the necessary data
+  if (!stockData || stockData.length === 0) {
+    console.error("No valid stock data available.");
+    return;
+  }
 
-  const timeSeries = stockData["Time Series (Daily)"];
-  
-  // Extract the last 100 days or 5 years (depending on the period)
-  const dataKeys = Object.keys(timeSeries).slice(0, period === "full" ? 2000 : 100);  // 100 days or 5 years worth of data
-  labels = dataKeys.reverse();
-  prices = dataKeys.map(date => parseFloat(timeSeries[date]["4. close"])).reverse();
+  // Destroy the previous chart if it exists
+  if (window.chartInstance) {
+    window.chartInstance.destroy();
+  }
+
+  let labels = [];
+  let prices = [];
+
+  // Determine how many data points to use
+  let timeFrame = {
+    "1D": 1,
+    "1W": 7,
+    "1M": 30,
+    "1Y": 365,
+    "5Y": 1825,
+    "All": 5000
+  };
+
+  let limit = timeFrame[period] || 7;  // Default to 1 week
+  let slicedData = stockData.slice(0, limit);
+
+  labels = slicedData.map(entry => entry.date).reverse();
+  prices = slicedData.map(entry => entry.close).reverse();
 
   const ctx = document.getElementById("stock-chart").getContext("2d");
-  
-  new Chart(ctx, {
+
+  // Create a new chart and store it in window.chartInstance
+  window.chartInstance = new Chart(ctx, {
     type: "line",
     data: {
       labels: labels,
       datasets: [{
-        label: 'Stock Price',
+        label: "Stock Price",
         data: prices,
-        borderColor: 'blue',
+        borderColor: "blue",
         fill: false
       }]
     },
