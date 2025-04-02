@@ -8,12 +8,13 @@ function clearError() {
   document.getElementById("error-message").style.display = "none";
 }
 // Load an empty chart when the page first loads
-createStockChart(); 
+// createStockChart(); 
 
 // Add event listener to search button
 document.addEventListener('DOMContentLoaded', () => {
   const searchButton = document.getElementById('search-button');
   const searchInput = document.getElementById('search-input');
+  const periodButtons = document.querySelectorAll('.time-changes button'); // Select all period buttons
 
   // Event listener for the search button click
   searchButton.addEventListener('click', async function () {
@@ -32,8 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Fetch stock data (it caches automatically)
       await fetchStockData(symbol);
 
-      // Filter & display chart (defaulting to 1 week of data)
-      updateChart(symbol, '1W');
+      // Set the default period to "1W" if no other period is selected
+      const defaultPeriod = "1W";
+      updateChart(symbol, defaultPeriod); // Default chart load on page load
+
+      // Add event listeners to period buttons
+      periodButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const period = button.id; // Get the period from the button's ID
+          updateChart(symbol, period); // Update the chart with the selected period
+        });
+      });
 
     } catch (error) {
       console.error('Error:', error);
@@ -61,20 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function hideErrorMessage() {
     document.getElementById('error-message').style.display = 'none';
   }
-
-  // Function to trigger shake effect
-  // function triggerShakeEffect() {
-  //   const searchInput = document.getElementById('search-input');
-
-  //   // Apply shake effect
-  //   searchInput.classList.add('shake');
-  //   searchInput.placeholder = 'Invalid Ticker';
-
-  //   setTimeout(() => {
-  //     searchInput.classList.remove('shake');
-  //     searchInput.placeholder = 'Search Stock Ticker...';
-  //   }, 3000); // Reset after 3 seconds
-  // }
 
 
   function triggerShakeEffect() {
