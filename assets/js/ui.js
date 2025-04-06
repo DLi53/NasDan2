@@ -33,15 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
       // Fetch stock data (it caches automatically)
       await fetchStockData(symbol);
 
-      // Set the default period to "1W" if no other period is selected
+      const stockInfo = await fetchStockInfo(symbol);  
+      updateStockInfo(stockInfo, period="1W");
+
+
       const defaultPeriod = "1W";
       updateChart(symbol, defaultPeriod); // Default chart load on page load
+      // updateStockInfoP(defaultPeriod)
 
       // Add event listeners to period buttons
       periodButtons.forEach(button => {
         button.addEventListener('click', () => {
           const period = button.id; // Get the period from the button's ID
-          updateChart(symbol, period); // Update the chart with the selected period
+          updateChart(symbol, period);// Update the chart with the selected period
+          updateStockInfo(stockInfo, period)
         });
       });
 
@@ -86,4 +91,41 @@ document.addEventListener('DOMContentLoaded', () => {
       searchInput.placeholder = 'Search Stock Ticker...'; // Reset the placeholder text
     }, 3000); // Duration of shake effect (adjust if needed)
   }
+
+
+  function updateStockInfo(data,period) {
+    const detailsContainer = document.getElementById('stock-details');
+    console.log(data)
+
+    if (!data) {
+      detailsContainer.innerHTML = "<p>No data available.</p>";
+      return;
+    }
+
+    const {
+      name,
+      price,
+      pe,
+      volume,
+      eps,
+      yearHigh,
+      yearLow,
+      symbol
+    } = data;
+
+    detailsContainer.innerHTML = `
+      <p><strong>Period:</strong> ${period}</p>
+      <p><strong>Symbol:</strong> ${symbol}</p>
+      <p><strong>Company:</strong> ${name}</p>
+      <p><strong>Current Price:</strong> $${price}</p>
+      <p><strong>52-Week High:</strong> $${yearHigh}</p>
+      <p><strong>52-Week Low:</strong> $${yearLow}</p>
+      <p><strong>P/E Ratio:</strong> ${pe}</p>
+      <p><strong>Volume:</strong> ${volume.toLocaleString()}</p>
+      <p><strong>EPS:</strong> ${eps}</p>
+    `;
+  }
+
+
+
 });

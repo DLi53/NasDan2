@@ -1,6 +1,9 @@
 const FinancialModelingPropKey = "mFn2xUReKNNNbYd2fjw78C551ZjJkHG4";
 const BASE_URL = "https://financialmodelingprep.com/api/v3/historical-price-full";
 let fullStockData = {}; // Cache for storing full historical data
+let stockInfoCache = {}; // Cache for storing stock info
+
+// https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?timeseries=5000&apikey=mFn2xUReKNNNbYd2fjw78C551ZjJkHG4
 
 // Fetch stock data from the API or return cached data if already fetched
 async function fetchStockData(symbol) {
@@ -66,7 +69,7 @@ function filterStockData(symbol, period) {
 
 
 // Update chart by fetching and filtering data
-async function updateChart(symbol, period = "1W") {
+async function updateChart(symbol, period) {
   await fetchStockData(symbol); // Fetch data if not already cached
   const filteredData = filterStockData(symbol, period);
   
@@ -74,3 +77,31 @@ async function updateChart(symbol, period = "1W") {
   createStockChart(filteredData, period); // Update chart with filtered data
 }
 
+
+// Fetch stock info and cache it
+async function fetchStockInfo(symbol) {
+  console.log('instockinfofetching')
+  // Check if data is already in the cache
+  if (stockInfoCache[symbol]) {
+    console.log("Using cached stock info for:", symbol);
+    return stockInfoCache[symbol]; // Return cached stock info if available
+  }
+
+  const url = `https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=${FinancialModelingPropKey}`;
+  
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data && data[0]) {
+      stockInfoCache[symbol] = data[0]; // Cache the stock info for future use
+      console.log("Fetched new stock info for:", symbol);
+      return data[0]; // Return the stock info
+    } else {
+      throw new Error("Stock info not found.");
+    }
+  } catch (error) {
+    console.error("Error fetching stock info:", error);
+    return null;
+  }
+}

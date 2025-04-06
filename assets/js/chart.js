@@ -1,4 +1,4 @@
-function createStockChart(stockData =[], period = "1W") {
+function createStockChart(stockData =[], period) {
   // Check if stockData is valid and contains the necessary data
   if (!stockData || stockData.length === 0) {
     console.error("No valid stock data available.");
@@ -14,7 +14,7 @@ function createStockChart(stockData =[], period = "1W") {
   let prices = [];
 
   let periodString= String(period);
-  console.log('periodString:', periodString); // Log the period to see its value
+  // console.log('periodString:', periodString); // Log the period to see its value
 
 
   // Determine how many data points to use
@@ -28,10 +28,11 @@ function createStockChart(stockData =[], period = "1W") {
     "Max": 5000
   };
   
-  console.log('period:',periodString, typeof period, typeof periodString, periodString, periodString.toUpperCase == "1M");
-  console.log(timeFrame[periodString])
-  let limit = timeFrame[periodString.trim] || 7;  // Default to 1 week
-  console.log('period:',periodString,'limit:',limit)
+  // console.log('period:',periodString, typeof period, typeof periodString, periodString, periodString.toUpperCase == "1M");
+  // console.log(timeFrame[periodString])
+  // let limit = timeFrame[periodString.trim] || 7;  // Default to 1 week
+  let limit = timeFrame[periodString] 
+  // console.log('period:',periodString,'limit:',limit)
   let slicedData = stockData.slice(0, limit);
 
   labels = slicedData.map(entry => entry.date).reverse();
