@@ -1,4 +1,14 @@
-function createStockChart(stockData =[], period) {
+// Function to create the stock chart
+
+window.isSMAVisible = false;
+const smaVisibility = {
+  5: false,
+  10: false,
+  20: false,
+};
+
+
+function createStockChart(stockData = [], period) {
   // Check if stockData is valid and contains the necessary data
   if (!stockData || stockData.length === 0) {
     console.error("No valid stock data available.");
@@ -13,11 +23,9 @@ function createStockChart(stockData =[], period) {
   let labels = [];
   let prices = [];
 
-  let periodString= String(period);
-  // console.log('periodString:', periodString); // Log the period to see its value
+  let periodString = String(period);
 
-
-  // Determine how many data points to use
+  // Determine how many data points to use based on the period
   let timeFrame = {
     "1D": 1,
     "1W": 7,
@@ -27,12 +35,8 @@ function createStockChart(stockData =[], period) {
     "5Y": 1825,
     "Max": 5000
   };
-  
-  // console.log('period:',periodString, typeof period, typeof periodString, periodString, periodString.toUpperCase == "1M");
-  // console.log(timeFrame[periodString])
-  // let limit = timeFrame[periodString.trim] || 7;  // Default to 1 week
-  let limit = timeFrame[periodString] 
-  // console.log('period:',periodString,'limit:',limit)
+
+  let limit = timeFrame[periodString] || 7;  // Default to 1 week if period is invalid
   let slicedData = stockData.slice(0, limit);
 
   labels = slicedData.map(entry => entry.date).reverse();
@@ -61,4 +65,44 @@ function createStockChart(stockData =[], period) {
       }
     }
   });
+}
+
+// Function to add SMA line to the chart
+function addSMALine(smaData, period) {
+  if (!window.chartInstance) {
+    console.error("Chart hasn't been initialized.");
+    return;
+  }
+
+  const chart = window.chartInstance;
+  const label = `SMA (${period}-day)`;
+
+  if (smaVisibility[period]) {
+    // Remove SMA line if it's already shown
+    chart.data.datasets = chart.data.datasets.filter(ds => ds.label !== label);
+    smaVisibility[period] = false;
+  } else {
+    const smaLine = smaData.map(entry => entry.sma).reverse();
+
+    chart.data.datasets.push({
+      label,
+      data: smaLine,
+      borderColor: getSMAColor(period),
+      fill: false,
+      tension: 0.3,
+    });
+
+    smaVisibility[period] = true;
+  }
+
+  chart.update();
+}
+
+function getSMAColor(period) {
+  const colors = {
+    5: 'orange',
+    10: 'green',
+    20: 'purple'
+  };
+  return colors[period] || 'gray';
 }

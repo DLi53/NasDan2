@@ -1,3 +1,7 @@
+let currentSymbol = null;
+let currentPeriod = "1W";
+
+
 function showError(message) {
   const errorMessage = document.getElementById("error-message");
   errorMessage.textContent = message;
@@ -40,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const defaultPeriod = "1W";
       updateChart(symbol, defaultPeriod); // Default chart load on page load
       // updateStockInfoP(defaultPeriod)
+      currentSymbol = symbol;
+      currentPeriod = defaultPeriod;
+
 
       // Add event listeners to period buttons
       periodButtons.forEach(button => {
@@ -47,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const period = button.id; // Get the period from the button's ID
           updateChart(symbol, period);// Update the chart with the selected period
           updateStockInfo(stockInfo, period)
+          currentPeriod=period;
         });
       });
 
@@ -125,6 +133,56 @@ document.addEventListener('DOMContentLoaded', () => {
       <p><strong>EPS:</strong> ${eps}</p>
     `;
   }
+
+  const macdSettingsByPeriod = {
+  "1D":    { short: 5, long: 12, signal: 9 },
+  "1W":    { short: 10, long: 26, signal: 9 },
+  "1M":    { short: 12, long: 26, signal: 9 },
+  "1Y":    { short: 19, long: 39, signal: 9 },
+  "5Y":    { short: 26, long: 52, signal: 9 },
+  "ALL":   { short: 26, long: 52, signal: 9 }
+  };
+
+let smaVisible = false;
+
+
+document.getElementById("SMA").addEventListener("click", async function (e) {
+  e.preventDefault();
+
+  if (!currentSymbol || !currentPeriod) {
+    showErrorMessage("Search for a stock first.");
+    return;
+  }
+
+  smaVisible = !smaVisible;
+
+  const existingSMAIndex = window.chartInstance.data.datasets.findIndex(ds => ds.label === "SMA 5");
+
+  if (smaVisible) {
+    if (existingSMAIndex === -1) {
+      // Get stock data in correct time order
+      let filteredData = filterStockData(currentSymbol, currentPeriod);
+
+      // Ensure chronological order for correct SMA calc
+      filteredData = [...filteredData].reverse(); // ⬅️ Reverse if your data is newest-to-oldest
+
+      const smaData = calculateSMA(filteredData, 5);
+
+      // You can reverse it again for chart display if needed
+      addSMALine(smaData.reverse(), 5); // ⬅️ Only reverse if your chart expects latest-to-earliest
+    }
+  } else {
+    // Remove SMA line
+    if (existingSMAIndex !== -1) {
+      window.chartInstance.data.datasets.splice(existingSMAIndex, 1);
+      window.chartInstance.update();
+    }
+  }
+});
+
+
+
+
 
 
 
